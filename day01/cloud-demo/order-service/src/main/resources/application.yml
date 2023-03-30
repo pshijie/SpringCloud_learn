@@ -1,0 +1,43 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/cloud_order?useSSL=false&serverTimezone=UTC
+    username: xxxx
+    password: xxxx
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: orderservice
+  cloud:
+    nacos:  # 配置nacos
+      server-addr: localhost:8848 # nacos服务地址
+      discovery:
+        cluster-name: KM  # 集群名称(即让自己属于KM集群)
+#        namespace: 3f864adc-a06b-4e17-8313-01fec60bd528  # 命名空间ID
+#        ephemeral: false  # 设置为非临时实例
+
+mybatis:
+  type-aliases-package: cn.itcast.user.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    cn.itcast: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://127.0.0.1:10086/eureka/  # eureka本身也是一个服务，所以会将自己注册上去
+
+userservice: # 指定服务名称，这样在调用该服务时才会使用到配置的规则
+  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule # 负载均衡规则
+    NFLoadBalancerRuleClassName: com.alibaba.cloud.nacos.ribbon.NacosRule
+
+ribbon:
+  eager-load:
+    enabled: true # 开启饥饿加载
+    clients: userservice # 指定对userservice服务进行饥饿加载
+
