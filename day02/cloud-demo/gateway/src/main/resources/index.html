@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跨域测试</title>
+</head>
+<body>
+<pre>
+  spring:
+    cloud:
+      gateway:
+        globalcors: # 全局的跨域处理
+          add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: # 允许哪些网站的跨域请求
+                - "http://localhost:8090"
+              allowedMethods: # 允许的跨域ajax的请求方式
+                - "GET"
+                - "POST"
+                - "DELETE"
+                - "PUT"
+                - "OPTIONS"
+              allowedHeaders: "*" # 允许在请求中携带的头信息
+              allowCredentials: true # 是否允许携带cookie
+              maxAge: 360000 # 这次跨域检测的有效期
+</pre>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    axios.get("http://localhost:10010/user/1?authorization=admin")
+        .then(resp => console.log(resp.data))
+        .catch(err => console.log(err))
+</script>
+</html>
